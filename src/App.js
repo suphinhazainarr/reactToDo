@@ -5,6 +5,12 @@ function App() {
   const [toDos, setToDos] = useState([]);
   const [toDo, setToDo] = useState('');
 
+
+  const handleDelete = (id) => {
+    setToDos((prevToDos) => prevToDos.filter((todo) => todo.id !== id));
+  };
+
+
   return (
     <div className="app">
       <div className="mainHeading">
@@ -53,16 +59,11 @@ function App() {
               <p>{obj.text}</p>
             </div>
             <div className="right">
-              <i className="fas fa-times"></i>
+              <i onClick={() => handleDelete(obj.id)} className="fas fa-times"></i>
             </div>
           </div>
         ))}
-        {toDos.map((obj) => {
-          if (obj.status) {
-            return <h1 key={obj.id}>{obj.text}</h1>;
-          }
-          return null;
-        })}
+        
       </div>
     </div>
   );
