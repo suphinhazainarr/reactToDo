@@ -1,17 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import { useState } from 'react';
 
 function App() {
   const [toDos, setToDos] = useState([]);
   const [toDo, setToDo] = useState('');
-
-  // const addTodo = () => {
-  //   if (toDo.trim() !== '') {
-  //     setToDos([...toDos, toDo]);
-  //     setToDo('');
-  //   }
-  // };
 
   return (
     <div className="app">
@@ -29,23 +21,52 @@ function App() {
           type="text"
           placeholder="🖊️ Add item..."
         />
-        <i onClick={()=>setToDos([...toDos,{ text: toDo,status: false}])} className="fas fa-plus"></i>
+        <i
+          onClick={() =>
+            setToDos([
+              ...toDos,
+              { id: Date.now(), text: toDo, status: false },
+            ])
+          }
+          className="fas fa-plus"
+        ></i>
       </div>
       <div className="todos">
-        {toDos.map((value, index) => (
-          <div key={index} className="todo">
+        {toDos.map((obj) => (
+          <div key={obj.id} className="todo">
             <div className="left">
-              <input value={value.status} type="checkbox" name="" id="" />
-              <p>{value.text}</p>
+              <input
+                onChange={(e) => {
+                  setToDos((prevToDos) =>
+                    prevToDos.map((todo) =>
+                      todo.id === obj.id
+                        ? { ...todo, status: e.target.checked }
+                        : todo
+                    )
+                  );
+                }}
+                checked={obj.status}
+                type="checkbox"
+                name=""
+                id=""
+              />
+              <p>{obj.text}</p>
             </div>
             <div className="right">
               <i className="fas fa-times"></i>
             </div>
           </div>
         ))}
+        {toDos.map((obj) => {
+          if (obj.status) {
+            return <h1 key={obj.id}>{obj.text}</h1>;
+          }
+          return null;
+        })}
       </div>
     </div>
   );
 }
 
 export default App;
+
